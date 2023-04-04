@@ -31,7 +31,6 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - PEERS=11
       - PEERDNS=10.2.0.100 # pihole
       - INTERNAL_SUBNET=10.6.0.0
       - SERVERPORT=${WIREGUARD_PORT}
