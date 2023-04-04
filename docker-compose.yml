@@ -9,6 +9,7 @@ networks:
 
 services:
   unbound:
+    cap_add: NET_ADMIN
     image: "mvance/unbound:latest"
     container_name: unbound
     restart: unless-stopped
