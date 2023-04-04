@@ -3,5 +3,6 @@ unbound/*
 etc-pihole/
 etc-dnsmasq.d/
 !unbound/unbound.conf
+!unbound/unbound.log
 pihole.env
 wireguard.env
