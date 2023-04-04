@@ -9,6 +9,8 @@ networks:
 
 services:
   unbound:
+    cap_add: 
+      - NET_ADMIN
     image: "mvance/unbound:latest"
     container_name: unbound
     restart: unless-stopped
@@ -26,21 +28,19 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+    env_file:
+      - wireguard.env
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Los_Angeles # Change to your timezone
-      - SERVERPORT=51820
-      #- SERVERURL=my.ddns.net #optional - For use with DDNS (Uncomment to use)
-      - PEERS=1 # How many peers to generate for you (clients)
-      - PEERDNS=10.2.0.100 # Set it to point to pihole
+      - PEERDNS=10.2.0.100 # pihole
       - INTERNAL_SUBNET=10.6.0.0
-      
+      - SERVERPORT=${WIREGUARD_PORT}
     volumes:
       - ./wireguard:/config
       - /lib/modules:/lib/modules
     ports:
-      - "51820:51820/udp"
+      - "${WIREGUARD_PORT}:${WIREGUARD_PORT}/udp"
     dns:
       - 10.2.0.100 # Points to pihole
       - 10.2.0.200 # Points to unbound
@@ -61,13 +61,12 @@ services:
     dns:
       - 127.0.0.1
       - 10.2.0.200 # Points to unbound
+    env_file:
+      - pihole.env
     environment:
-      TZ: "America/Los_Angeles"
-      WEBPASSWORD: "" # Blank password - Can be whatever you want.
-      ServerIP: 10.2.0.100 # Internal IP of pihole
-      DNS1: 10.2.0.200 # Unbound IP
-      DNS2: 10.2.0.200 # If we don't specify two, it will auto pick google.
-    # Volumes store your data between container upgrades
+      - ServerIP=10.2.0.100
+      - DNS1=10.2.0.200
+      - DNS2=10.2.0.200
     volumes:
       - "./etc-pihole/:/etc/pihole/"
       - "./etc-dnsmasq.d/:/etc/dnsmasq.d/"
