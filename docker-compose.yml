@@ -38,7 +38,7 @@ services:
       - ./wireguard:/config
       - /lib/modules:/lib/modules
     ports:
-      - "${SERVERPORT}:${WIREGUARD_PORT}/udp"
+      - "${WIREGUARD_PORT}:${WIREGUARD_PORT}/udp"
     dns:
       - 10.2.0.100 # Points to pihole
       - 10.2.0.200 # Points to unbound
